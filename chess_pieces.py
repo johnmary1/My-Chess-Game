@@ -9,104 +9,125 @@ class Piece(object):
     def __init__(self):
         pass    
 
-#movement_type = a list of booleans, whether or not a piece can move:
+# movement_type = a list of booleans, whether or not a piece can move:
 # 1. horizontal 2. vertical 3. diagonal 4. knight
 
 class Pawn(Piece):
-    type_piece = "pawn"
-    movement_type = [False, True, True, False]
-    #spaces_can_move = 2
-    def __init__(self, color, column, row):
+    def __init__(self, color, column, row, board):
         self.color = color
         self.column = column
         self.row = row
-        self.occupied_space = board[row][column]
-    #Need to add en passant and pawn promotion abilities
+        self.occupied_space = board[self.row][self.column]    
 
 class Rook(Piece):
-    type_piece = "rook"    
-    movement_type = [True, True, False, False]
-    spaces_can_move = 7
-    def __init__(self, color, column, row):
+    def __init__(self, color, column, row, board):
         self.color = color
         self.column = column
         self.row = row
-        self.occupied_space = board[row][column]
-        board[column][row].occupying_piece = self
+        self.occupied_space = board[self.row][self.column]  
 
-#Creates all the starting white pieces
-def create_white_pieces():
+class Knight(Piece):
+    def __init__(self, color, column, row, board):
+        self.color = color
+        self.column = column
+        self.row = row
+        self.occupied_space = board[self.row][self.column]  
+
+class Bishop(Piece):
+    def __init__(self, color, column, row, board):
+        self.color = color
+        self.column = column
+        self.row = row
+        self.occupied_space = board[self.row][self.column]  
+
+class Queen(Piece):
+    def __init__(self, color, column, row, board):
+        self.color = color
+        self.column = column
+        self.row = row
+        self.occupied_space = board[self.row][self.column]  
+
+class King(Piece):
+    def __init__(self, color, column, row, board):
+        self.color = color
+        self.column = column
+        self.row = row
+        self.occupied_space = board[self.row][self.column]  
+
+
+# Creates all the starting white pieces
+def create_white_pieces(board):
     white_pieces = []
-    A2Pawn = Pawn("white", 0, 1)
+    A2Pawn = Pawn("white", 0, 1, board)
     white_pieces.append(A2Pawn)
-    B2Pawn = Pawn("white", 1, 1)
+    B2Pawn = Pawn("white", 1, 1, board)
     white_pieces.append(B2Pawn)
-    C2Pawn = Pawn("white", 2, 1)
+    C2Pawn = Pawn("white", 2, 1, board)
     white_pieces.append(C2Pawn)
-    D2Pawn = Pawn("white", 3, 1)
+    D2Pawn = Pawn("white", 3, 1, board)
     white_pieces.append(D2Pawn)
-    E2Pawn = Pawn("white", 4, 1)
+    E2Pawn = Pawn("white", 4, 1, board)
     white_pieces.append(E2Pawn)
-    F2Pawn = Pawn("white", 5, 1)
+    F2Pawn = Pawn("white", 5, 1, board)
     white_pieces.append(F2Pawn)
-    G2Pawn = Pawn("white", 6, 1)
+    G2Pawn = Pawn("white", 6, 1, board)
     white_pieces.append(G2Pawn)
-    H2Pawn = Pawn("white", 7, 1)
+    H2Pawn = Pawn("white", 7, 1, board)
     white_pieces.append(H2Pawn)
-    WQRook = Rook("white", 0, 0)
+    WQRook = Rook("white", 0, 0, board)
     white_pieces.append(WQRook)
-    WQKnight = Knight("white", 2, 0)
+    WQKnight = Knight("white", 2, 0, board)
     white_pieces.append(WQKnight)
-    WQBishop = Bishop("white", 1, 0)
+    WQBishop = Bishop("white", 1, 0, board)
     white_pieces.append(WQBishop)
-    WQueen = Queen("white", 3, 0)
+    WQueen = Queen("white", 3, 0, board)
     white_pieces.append(WQueen)
-    WKing = King("white", 4, 0)
+    WKing = King("white", 4, 0, board)
     white_pieces.append(WKing)
-    WKBishop = Bishop("white", 6, 0)
+    WKBishop = Bishop("white", 6, 0, board)
     white_pieces.append(WKBishop)
-    WKKnight = Knight("white", 5, 0)
+    WKKnight = Knight("white", 5, 0, board)
     white_pieces.append(WKKnight)
-    WKRook = Rook("white", 7, 0)
+    WKRook = Rook("white", 7, 0, board)
     white_pieces.append(WKRook)    
     return white_pieces
 
-###I need to update the board to show the position of all the pieces
+# I need to update the board to show the position of all the pieces
 
-#Creates all the starting black pieces
-def create_black_pieces():
+# Creates all the starting black pieces
+def create_black_pieces(board):
     black_pieces = []
-    A7Pawn = Pawn("black", 0, 6)
+    A7Pawn = Pawn("black", 0, 6, board)
     black_pieces.append(A7Pawn)
-    B7Pawn = Pawn("black", 1, 6)
+    B7Pawn = Pawn("black", 1, 6, board)
     black_pieces.append(B7Pawn)
-    C7Pawn = Pawn("black", 2, 6)
+    C7Pawn = Pawn("black", 2, 6, board)
     black_pieces.append(C7Pawn)
-    D7Pawn = Pawn("black", 3, 6)
+    D7Pawn = Pawn("black", 3, 6, board)
     black_pieces.append(D7Pawn)
-    E7Pawn = Pawn("black", 4, 6)
+    E7Pawn = Pawn("black", 4, 6, board)
     black_pieces.append(E7Pawn)
-    F7Pawn = Pawn("black", 5, 6)
+    F7Pawn = Pawn("black", 5, 6, board)
     black_pieces.append(F7Pawn)
-    G7Pawn = Pawn("black", 6, 6)
+    G7Pawn = Pawn("black", 6, 6, board)
     black_pieces.append(G7Pawn)
-    H7Pawn = Pawn("black", 7, 6)
+    H7Pawn = Pawn("black", 7, 6, board)
     black_pieces.append(H7Pawn)
-    BQRook = Rook("black", 0, 7)
+    BQRook = Rook("black", 0, 7, board)
     black_pieces.append(BQRook)
-    BQKnight = Knight("black", 1, 7)
+    BQKnight = Knight("black", 1, 7, board)
     black_pieces.append(BQKnight)
-    BQBishop = Bishop("black", 2, 7)
+    BQBishop = Bishop("black", 2, 7, board)
     black_pieces.append(BQBishop)
-    BQueen = Queen("black", 3, 7)
+    BQueen = Queen("black", 3, 7, board)
     black_pieces.append(BQueen)
-    BKing = King("black", 4, 7)
+    BKing = King("black", 4, 7, board)
     black_pieces.append(BKing)
-    BKBishop = Bishop("black", 5, 7)
+    BKBishop = Bishop("black", 5, 7, board)
     black_pieces.append(BKBishop)
-    BKKnight = Knight("black", 6, 7)
+    BKKnight = Knight("black", 6, 7, board)
     black_pieces.append(BKKnight)
-    BKRook = Rook("black", 7, 7)
+    BKRook = Rook("black", 7, 7, board)
     black_pieces.append(BKRook)
     return black_pieces
 
