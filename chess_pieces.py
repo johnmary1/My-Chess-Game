@@ -9,51 +9,73 @@ class Piece(object):
     def __init__(self):
         pass    
 
-# movement_type = a list of booleans, whether or not a piece can move:
-# 1. horizontal 2. vertical 3. diagonal 4. knight
-
 class Pawn(Piece):
     def __init__(self, color, column, row, board):
         self.color = color
         self.column = column
         self.row = row
-        self.occupied_space = board[self.row][self.column]    
+        self.occupied_space = board[self.row][self.column]
+        board[self.row][self.column].occupying_piece = self
+    
+    def __str__(self):
+        return "pawn"    
 
 class Rook(Piece):
     def __init__(self, color, column, row, board):
         self.color = color
         self.column = column
         self.row = row
-        self.occupied_space = board[self.row][self.column]  
+        self.occupied_space = board[self.row][self.column]
+        board[self.row][self.column].occupying_piece = self
+        # This creates instances of movement type classes... this needs work...        
+        movement_type = [HorizontalMove(), VerticalMove()]  
+    
+    def __str__(self):
+        return "rook" 
 
 class Knight(Piece):
     def __init__(self, color, column, row, board):
         self.color = color
         self.column = column
         self.row = row
-        self.occupied_space = board[self.row][self.column]  
+        self.occupied_space = board[self.row][self.column]
+        board[self.row][self.column].occupying_piece = self  
+    
+    def __str__(self):
+        return "knight" 
 
 class Bishop(Piece):
     def __init__(self, color, column, row, board):
         self.color = color
         self.column = column
         self.row = row
-        self.occupied_space = board[self.row][self.column]  
+        self.occupied_space = board[self.row][self.column]
+        board[self.row][self.column].occupying_piece = self  
+    
+    def __str__(self):
+        return "bishop" 
 
 class Queen(Piece):
     def __init__(self, color, column, row, board):
         self.color = color
         self.column = column
         self.row = row
-        self.occupied_space = board[self.row][self.column]  
+        self.occupied_space = board[self.row][self.column]
+        board[self.row][self.column].occupying_piece = self  
+    
+    def __str__(self):
+        return "queen" 
 
 class King(Piece):
     def __init__(self, color, column, row, board):
         self.color = color
         self.column = column
         self.row = row
-        self.occupied_space = board[self.row][self.column]  
-
+        self.occupied_space = board[self.row][self.column]
+        board[self.row][self.column].occupying_piece = self  
+    
+    def __str__(self):
+        return "king" 
 
 # Creates all the starting white pieces
 def create_white_pieces(board):
