@@ -1,11 +1,13 @@
 """ This file creates the pieces. 
 """
+from movement import *
 
 # Create a general class for pieces
-class Piece(object):
-    moved_yet = False  
+class Piece(object):  
     def __init__(self):
-        pass    
+        # I need to figure out why this doesn't pass to all children classes...
+        # Thought it would... Having trouble with this property generally       
+        self.moved_yet = False    
 
 class Pawn(Piece):
     def __init__(self, color, row, column, board):
@@ -13,12 +15,17 @@ class Pawn(Piece):
         self.row = row
         self.column = column
         self.occupied_space = board[self.row][self.column]
+        self.moved_yet = False
         board[self.row][self.column].occupying_piece = self
     
-    def __str__(self):
+    def __repr__(self):
         return "pawn"    
 
     def threatening(self, board):
+        # Problem, this doesn't register diagonal captures as possible moves if there
+        # isn't a piece there... this could be trouble for determining check
+        # Other problem... I only thought about this function with respect to white...
+        # Black the numbers need to go in the other direction..
         move_one = PawnMove()
         threatened_squares = move_one.squares_threatening(self.row, self.column, board)
         return threatened_squares
@@ -31,7 +38,7 @@ class Rook(Piece):
         self.occupied_space = board[self.row][self.column]
         board[self.row][self.column].occupying_piece = self
     
-    def __str__(self):
+    def __repr__(self):
         return "rook" 
               
     def threatening(self, board):
@@ -50,7 +57,7 @@ class Knight(Piece):
         self.occupied_space = board[self.row][self.column]
         board[self.row][self.column].occupying_piece = self  
     
-    def __str__(self):
+    def __repr__(self):
         return "knight" 
 
 class Bishop(Piece):
@@ -61,8 +68,13 @@ class Bishop(Piece):
         self.occupied_space = board[self.row][self.column]
         board[self.row][self.column].occupying_piece = self  
     
-    def __str__(self):
+    def __repr__(self):
         return "bishop" 
+
+    def threatening(self, board):
+        move_one = DiagonalMove()
+        threatened_squares = move_one.squares_threatening(self.row, self.column, board)
+        return threatened_squares
 
 class Queen(Piece):
     def __init__(self, color, row, column, board):
@@ -72,8 +84,18 @@ class Queen(Piece):
         self.occupied_space = board[self.row][self.column]
         board[self.row][self.column].occupying_piece = self  
     
-    def __str__(self):
+    def __repr__(self):
         return "queen" 
+
+    def threatening(self, board):
+        move_one = HorizontalMove()
+        move_two = VerticalMove()
+        move_three = DiagonalMove()
+        threatened_one = move_one.squares_threatening(self.row, self.column, board)
+        threatened_two = move_two.squares_threatening(self.row, self.column, board)
+        threatened_three = move_three.squares_threatening(self.row, self.column, board)
+        threatened_squares = threatened_one + threatened_two + threatened_three
+        return threatened_squares
 
 class King(Piece):
     def __init__(self, color, row, column, board):
@@ -83,7 +105,7 @@ class King(Piece):
         self.occupied_space = board[self.row][self.column]
         board[self.row][self.column].occupying_piece = self  
     
-    def __str__(self):
+    def __repr__(self):
         return "king" 
 
     def threatening(self, board):
@@ -92,79 +114,48 @@ class King(Piece):
         return threatened_squares
 
 # Creates all the starting white pieces
-def create_white_pieces(board):
-    white_pieces = []
-    A2Pawn = Pawn("white", 1, 0, board)
-    white_pieces.append(A2Pawn)
-    B2Pawn = Pawn("white", 1, 1, board)
-    white_pieces.append(B2Pawn)
-    C2Pawn = Pawn("white", 1, 2, board)
-    white_pieces.append(C2Pawn)
-    D2Pawn = Pawn("white", 1, 3, board)
-    white_pieces.append(D2Pawn)
-    E2Pawn = Pawn("white", 1, 4, board)
-    white_pieces.append(E2Pawn)
-    F2Pawn = Pawn("white", 1, 5, board)
-    white_pieces.append(F2Pawn)
-    G2Pawn = Pawn("white", 1, 6, board)
-    white_pieces.append(G2Pawn)
-    H2Pawn = Pawn("white", 1, 7, board)
-    white_pieces.append(H2Pawn)
-    WQRook = Rook("white", 0, 0, board)
-    white_pieces.append(WQRook)
-    WQKnight = Knight("white", 0, 1, board)
-    white_pieces.append(WQKnight)
-    WQBishop = Bishop("white", 0, 2, board)
-    white_pieces.append(WQBishop)
-    WQueen = Queen("white", 0, 3, board)
-    white_pieces.append(WQueen)
-    WKing = King("white", 0, 4, board)
-    white_pieces.append(WKing)
-    WKBishop = Bishop("white", 0, 5, board)
-    white_pieces.append(WKBishop)
-    WKKnight = Knight("white", 0, 6, board)
-    white_pieces.append(WKKnight)
-    WKRook = Rook("white", 0, 7, board)
-    white_pieces.append(WKRook)    
-    return white_pieces
 
-# Creates all the starting black pieces
-def create_black_pieces(board):
-    black_pieces = []
-    A7Pawn = Pawn("black", 6, 0, board)
-    black_pieces.append(A7Pawn)
-    B7Pawn = Pawn("black", 6, 1, board)
-    black_pieces.append(B7Pawn)
-    C7Pawn = Pawn("black", 6, 2, board)
-    black_pieces.append(C7Pawn)
-    D7Pawn = Pawn("black", 6, 3, board)
-    black_pieces.append(D7Pawn)
-    E7Pawn = Pawn("black", 6, 4, board)
-    black_pieces.append(E7Pawn)
-    F7Pawn = Pawn("black", 6, 5, board)
-    black_pieces.append(F7Pawn)
-    G7Pawn = Pawn("black", 6, 6, board)
-    black_pieces.append(G7Pawn)
-    H7Pawn = Pawn("black", 6, 7, board)
-    black_pieces.append(H7Pawn)
-    BQRook = Rook("black", 7, 0, board)
-    black_pieces.append(BQRook)
-    BQKnight = Knight("black", 7, 1, board)
-    black_pieces.append(BQKnight)
-    BQBishop = Bishop("black", 7, 2, board)
-    black_pieces.append(BQBishop)
-    BQueen = Queen("black", 7, 3, board)
-    black_pieces.append(BQueen)
-    BKing = King("black", 7, 4, board)
-    black_pieces.append(BKing)
-    BKBishop = Bishop("black", 7, 5, board)
-    black_pieces.append(BKBishop)
-    BKKnight = Knight("black", 7, 6, board)
-    black_pieces.append(BKKnight)
-    BKRook = Rook("black", 7, 7, board)
-    black_pieces.append(BKRook)
-    return black_pieces
-
-
-
+class set_of_pieces(object):  
+        
+    def __init__(self, color):
+        self.color = color
+        self.pieces = []
+    
+    def create_pieces(self, board):
+        new_pieces = []        
+        if self.color == "white":        
+            new_pieces.append(Pawn("white", 1, 0, board))
+            new_pieces.append(Pawn("white", 1, 1, board))
+            new_pieces.append(Pawn("white", 1, 2, board))
+            new_pieces.append(Pawn("white", 1, 3, board))
+            new_pieces.append(Pawn("white", 1, 4, board))
+            new_pieces.append(Pawn("white", 1, 5, board))
+            new_pieces.append(Pawn("white", 1, 6, board))
+            new_pieces.append(Pawn("white", 1, 7, board))
+            new_pieces.append(Rook("white", 0, 0, board))
+            new_pieces.append(Knight("white", 0, 1, board))
+            new_pieces.append(Bishop("white", 0, 2, board))
+            new_pieces.append(Queen("white", 0, 3, board))
+            new_pieces.append(King("white", 0, 4, board))
+            new_pieces.append(Bishop("white", 0, 5, board))
+            new_pieces.append(Knight("white", 0, 6, board))
+            new_pieces.append(Rook("white", 0, 7, board))
+        else:
+            new_pieces.append(Pawn("black", 6, 0, board))
+            new_pieces.append(Pawn("black", 6, 1, board))
+            new_pieces.append(Pawn("black", 6, 2, board))
+            new_pieces.append(Pawn("black", 6, 3, board))
+            new_pieces.append(Pawn("black", 6, 4, board))
+            new_pieces.append(Pawn("black", 6, 5, board))
+            new_pieces.append(Pawn("black", 6, 6, board))
+            new_pieces.append(Pawn("black", 6, 7, board))
+            new_pieces.append(Rook("black", 7, 0, board))
+            new_pieces.append(Knight("black", 7, 1, board))
+            new_pieces.append(Bishop("black", 7, 2, board))
+            new_pieces.append(Queen("black", 7, 3, board))
+            new_pieces.append(King("black", 7, 4, board))
+            new_pieces.append(Bishop("black", 7, 5, board))
+            new_pieces.append(Knight("black", 7, 6, board))
+            new_pieces.append(Rook("black", 7, 7, board))
+        return new_pieces                
 
